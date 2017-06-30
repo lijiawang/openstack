@@ -1,0 +1,122 @@
+[root@kolla ~]# openstack user create --password qwe qwe     #创建用户
++---------------------+----------------------------------+
+| Field               | Value                            |
++---------------------+----------------------------------+
+| domain_id           | default                          |
+| enabled             | True                             |
+| id                  | 0767892795bf410c9aa0d046905c96f4 |
+| name                | qwe                              |
+| options             | {}                               |
+| password_expires_at | None                             |
++---------------------+----------------------------------+
+[root@kolla ~]# openstack project create qwe --domain default   #创建项目
++-------------+----------------------------------+
+| Field       | Value                            |
++-------------+----------------------------------+
+| description |                                  |
+| domain_id   | default                          |
+| enabled     | True                             |
+| id          | 3d6119905daf42a39b29615a910cecf6 |
+| is_domain   | False                            |
+| name        | qwe                              |
+| parent_id   | default                          |
++-------------+----------------------------------+
+[root@kolla ~]# openstack role list
++----------------------------------+------------------+
+| ID                               | Name             |
++----------------------------------+------------------+
+| 423d8d730c65452382a72e29fbab93af | admin            |
+| 9fe2ff9ee4384b1894a90878d3e92bab | _member_         |
+| b6e129ccf4d04f71a9c930156822d557 | heat_stack_owner |
+| bba3306478e44cfea40ca8802c19316c | heat_stack_user  |
++----------------------------------+------------------+
+[root@kolla ~]# openstack role add --project qwe --user qwe _member_          #给用户分配一个用户和角色
+
+[root@kolla ~]# openstack role create asd                 # 创建角色
++-----------+----------------------------------+
+| Field     | Value                            |
++-----------+----------------------------------+
+| domain_id | None                             |
+| id        | d6f44544073049e58bb66aa620e5ba2a |
+| name      | asd                              |
++-----------+----------------------------------+
+
+[root@kolla ~]# openstack image list
++--------------------------------------+---------+--------+
+| ID                                   | Name    | Status |
++--------------------------------------+---------+--------+
+| 55e5283a-f590-457b-94bf-724bcc8258b0 | cirros  | active |
+| 23fadb9a-24e8-4c8c-aae4-3582705e8b01 | cirros1 | active |
++--------------------------------------+---------+--------+
+[root@kolla ~]# openstack  flavor list
++--------------------------------------+------------+-------+------+-----------+-------+-----------+
+| ID                                   | Name       |   RAM | Disk | Ephemeral | VCPUs | Is Public |
++--------------------------------------+------------+-------+------+-----------+-------+-----------+
+| 1                                    | tiny       |   256 |    1 |         0 |     1 | True      |
+| 620d808f-d2e9-4f59-89b2-44c8ad7bcbbe | standard-4 |  8192 |   40 |         0 |     4 | True      |
+| 9efd2f60-93ce-4777-aa4c-781a16846e10 | standard-2 |  4096 |   40 |         0 |     2 | True      |
+| a3b2426e-7d42-4684-b111-89b08561a840 | standard-8 | 16384 |   40 |         0 |     8 | True      |
+| b67de1cf-c22d-4445-90d6-f0f21a4d8c5e | micro-1    |   512 |   40 |         0 |     1 | True      |
++--------------------------------------+------------+-------+------+-----------+-------+-----------+
+[root@kolla ~]# openstack floating ip list
++--------------------------------------+---------------------+------------------+--------------------------------------+--------------------------------------+----------------------------------+
+| ID                                   | Floating IP Address | Fixed IP Address | Port                                 | Floating Network                     | Project                          |
++--------------------------------------+---------------------+------------------+--------------------------------------+--------------------------------------+----------------------------------+
+| a98e9878-cf6a-4630-9f59-ec684a052842 | 192.168.18.14       | 10.0.0.19        | 82076c71-3fc0-4522-8fca-4d99b4eae102 | 314ac1b1-ac84-432e-9f0f-9b545cf0d6fc | ae94d1072be14ea28892af5bc660d4c4 |
++--------------------------------------+---------------------+------------------+--------------------------------------+--------------------------------------+----------------------------------+
+[root@kolla ~]# openstack network list
++--------------------------------------+----------+--------------------------------------+
+| ID                                   | Name     | Subnets                              |
++--------------------------------------+----------+--------------------------------------+
+| 0896efb0-a93f-4d3a-a3cd-5f662a50d097 | ljw-net  | 46067d59-c75a-4542-b817-74052436776a |
+| 314ac1b1-ac84-432e-9f0f-9b545cf0d6fc | public1  | aaaa1253-4313-47fe-9280-af4065dd556b |
+| f99fbfd5-b835-49a2-b3fe-0b88815c81ec | demo-net | 19629916-bb6e-49bd-ad56-6065be808376 |
++--------------------------------------+----------+--------------------------------------+
+[root@kolla ~]# openstack image list
++--------------------------------------+---------+--------+
+| ID                                   | Name    | Status |
++--------------------------------------+---------+--------+
+| 55e5283a-f590-457b-94bf-724bcc8258b0 | cirros  | active |
+| 23fadb9a-24e8-4c8c-aae4-3582705e8b01 | cirros1 | active |
++--------------------------------------+---------+--------+
+[root@kolla ~]# openstack server create --image cirros --flavor timy --nic net-id=0896efb0-a93f-4d3a-a3cd-5f662a50d097 test-vm
+No flavor with a name or ID of 'timy' exists.
+[root@kolla ~]# openstack server create --image cirros --flavor 1 --nic net-id=0896efb0-a93f-4d3a-a3cd-5f662a50d097 test-vm
++-------------------------------------+-----------------------------------------------+
+| Field                               | Value                                         |
++-------------------------------------+-----------------------------------------------+
+| OS-DCF:diskConfig                   | MANUAL                                        |
+| OS-EXT-AZ:availability_zone         |                                               |
+| OS-EXT-SRV-ATTR:host                | None                                          |
+| OS-EXT-SRV-ATTR:hypervisor_hostname | None                                          |
+| OS-EXT-SRV-ATTR:instance_name       |                                               |
+| OS-EXT-STS:power_state              | NOSTATE                                       |
+| OS-EXT-STS:task_state               | scheduling                                    |
+| OS-EXT-STS:vm_state                 | building                                      |
+| OS-SRV-USG:launched_at              | None                                          |
+| OS-SRV-USG:terminated_at            | None                                          |
+| accessIPv4                          |                                               |
+| accessIPv6                          |                                               |
+| addresses                           |                                               |
+| adminPass                           | K9FBfxaM3PjB                                  |
+| config_drive                        |                                               |
+| created                             | 2017-06-30T12:58:23Z                          |
+| flavor                              | tiny (1)                                      |
+| hostId                              |                                               |
+| id                                  | aba04242-7a5c-4c70-8186-cfc99042c0b1          |
+| image                               | cirros (55e5283a-f590-457b-94bf-724bcc8258b0) |
+| key_name                            | None                                          |
+| name                                | test-vm                                       |
+| progress                            | 0                                             |
+| project_id                          | ae94d1072be14ea28892af5bc660d4c4              |
+| properties                          |                                               |
+| security_groups                     | name='default'                                |
+| status                              | BUILD                                         |
+| updated                             | 2017-06-30T12:58:23Z                          |
+| user_id                             | 796c55f5fbbb4db0a41b3ea8ed256a5d              |
+| volumes_attached                    |                                               |
++-------------------------------------+-----------------------------------------------+
+
+
+
+
